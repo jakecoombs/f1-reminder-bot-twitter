@@ -76,8 +76,3 @@ exports.tweet = functions.https.onRequest(async (request, response) => {
   const {data} = await refreshedClient.v2.tweet(nextTweet);
   response.send(data);
 });
-
-
-exports.test = functions.https.onRequest(async (request, response) => {
-  response.send({isEmu: process.env.FUNCTIONS_EMULATOR});
-});
