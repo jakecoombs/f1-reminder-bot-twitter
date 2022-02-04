@@ -11,11 +11,10 @@ const twitterClient = new TwitterApi({
   clientSecret: functions.config().f1bot.client_secret,
 });
 
-const callbackURL = `${
+const callbackURL =
   process.env.FUNCTIONS_EMULATOR ?
     functions.config().f1bot.local_firebase_url :
-    functions.config().f1bot.firebase_url
-}/${functions.config().f1bot.callback_path}`;
+    functions.config().f1bot.firebase_url;
 
 // Step 1
 exports.auth = functions.https.onRequest(async (request, response) => {
@@ -80,5 +79,5 @@ exports.tweet = functions.https.onRequest(async (request, response) => {
 
 
 exports.test = functions.https.onRequest(async (request, response) => {
-  response.send(process.env.FUNCTIONS_EMULATOR);
+  response.send({isEmu: process.env.FUNCTIONS_EMULATOR});
 });
