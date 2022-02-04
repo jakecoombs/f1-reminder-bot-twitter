@@ -2,19 +2,20 @@ const functions = require("firebase-functions");
 const admin = require("firebase-admin");
 admin.initializeApp();
 
-const dotenv = require("dotenv");
-dotenv.config();
-
-const dbTokenCollection = admin.firestore().doc(process.env.TOKEN_COLLECTION);
+const dbTokenCollection = admin.firestore().doc(
+    functions.config().f1bot.token_collection);
 
 const TwitterApi = require("twitter-api-v2").default;
 const twitterClient = new TwitterApi({
-  clientId: process.env.CLIENT_ID,
-  clientSecret: process.env.CLIENT_SECRET,
+  clientId: functions.config().f1bot.client_id,
+  clientSecret: functions.config().f1bot.client_secret,
 });
 
-const callbackURL =
-  `${process.env.FIREBASE_URL}/${process.env.CALLBACK_PATH}`;
+const callbackURL = `${
+  process.env.FUNCTIONS_EMULATOR ?
+    functions.config().f1bot.local_firebase_url :
+    functions.config().f1bot.firebase_url
+}/${functions.config().f1bot.callback_path}`;
 
 // Step 1
 exports.auth = functions.https.onRequest(async (request, response) => {
@@ -75,4 +76,9 @@ exports.tweet = functions.https.onRequest(async (request, response) => {
 
   const {data} = await refreshedClient.v2.tweet(nextTweet);
   response.send(data);
+});
+
+
+exports.test = functions.https.onRequest(async (request, response) => {
+  response.send(process.env.FUNCTIONS_EMULATOR);
 });
