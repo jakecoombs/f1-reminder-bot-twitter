@@ -152,7 +152,7 @@ exports.dailyLaunchReminder = functions.https.onRequest(
           )} (${
             nextLiveryReveals.docs[0].data().date.toDate().getDate() -
           today.getDate()
-          } days)\n\n`;
+          } day(s))\n\n`;
 
           if (nextLiveryReveals.docs.length > 1) {
             nextLiveryReveals.docs.shift();
@@ -166,6 +166,8 @@ exports.dailyLaunchReminder = functions.https.onRequest(
           }
         }
       }
+
+      msg += "\n\n#F1 @F1";
 
       const {data} = await refreshedClient.v2.tweet(msg);
       response.send(data);
