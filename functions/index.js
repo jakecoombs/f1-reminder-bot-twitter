@@ -133,7 +133,6 @@ exports.dailyLaunchReminder = functions.https.onRequest(
             nextLiveryReveals.docs.shift();
 
             if (nextLiveryReveals.docs.length > 0) {
-              nextLiveryReveals.docs.shift();
               msg += "\n\nUpcoming:\n";
               nextLiveryReveals.docs.forEach((doc) => {
                 msg += `\n${doc.data().team} - ${presentableDate(
@@ -142,6 +141,7 @@ exports.dailyLaunchReminder = functions.https.onRequest(
                   doc.data().date.toDate().getDate() - today.getDate()
                 } days)`;
               });
+              nextLiveryReveals.docs.shift();
             }
           });
         } else {
