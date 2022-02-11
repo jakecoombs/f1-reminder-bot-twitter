@@ -219,6 +219,7 @@ exports.nextLaunchReminder = functions.https.onRequest(
 
       // How long left to go
       const hours = Math.round(Math.abs(doc.date.toDate() - today) / 36e5);
+      const mins = Math.round(Math.abs(doc.date.toDate() - today) / 60000);
 
       // If too long away then do not tweet
       if (hours > 3) {
@@ -227,7 +228,6 @@ exports.nextLaunchReminder = functions.https.onRequest(
 
       // Build tweet
       if (hours < 1) {
-        const mins = Math.round(Math.abs(doc.date.toDate() - today) / 60000);
         if (mins > 36) {
           return response.send(200);
         } else if (mins > 10) {
@@ -235,7 +235,7 @@ exports.nextLaunchReminder = functions.https.onRequest(
         } else {
           msg += "Launch is happening now!";
         }
-      } else if (tweetedAgo > 59) {
+      } else if (tweetedAgo > 59 && (mins % 60) < 10) {
         msg += `${hours} Hour(s) To Go`;
       } else {
         return response.send(200);
